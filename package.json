@@ -22,7 +22,9 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.7.1"
+    "mongoose": "^8.7.1",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.25.8",

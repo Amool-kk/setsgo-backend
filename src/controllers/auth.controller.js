@@ -3,7 +3,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { User } from "../models/user.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
-const generateAccessAndRefereshToken = async (userId) => {
+export const generateAccessAndRefereshToken = async (userId) => {
   try {
     const user = await User.findOne({ _id: userId });
     const accessToken = await user.generateAccessToken();
@@ -12,9 +12,10 @@ const generateAccessAndRefereshToken = async (userId) => {
     user.refreshToken = refreshToken;
     await user.save();
 
+    console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", user)
     return { accessToken, refreshToken };
   } catch (error) {
-    throw new ApiError(500);
+    throw new ApiError(500, "testing");
   }
 };
 
