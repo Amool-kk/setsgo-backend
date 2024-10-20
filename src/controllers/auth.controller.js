@@ -12,7 +12,6 @@ export const generateAccessAndRefereshToken = async (userId) => {
     user.refreshToken = refreshToken;
     await user.save();
 
-    console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", user)
     return { accessToken, refreshToken };
   } catch (error) {
     throw new ApiError(500, "testing");
@@ -64,7 +63,12 @@ const loginUser = asyncHandler(async (req, res) => {
   const existedUser = await User.findOne({ email });
 
   if (!existedUser) {
-    let temp = new ApiError(401, "User is not exists");
+    let temp = new ApiError(404, "User is not exists");
+    return res.status(404).json({ ...temp, message: temp.message });
+  }
+
+  if (existedUser.googleId) {
+    let temp = new ApiError(404, "User is not exists");
     return res.status(404).json({ ...temp, message: temp.message });
   }
 
