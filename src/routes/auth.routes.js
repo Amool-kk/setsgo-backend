@@ -4,11 +4,10 @@ import {
   loginUser,
   logoutUser,
   registerUser,
+  userProfile,
 } from "../controllers/auth.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import passport from "passport";
-import jwt from "jsonwebtoken";
-import { ApiResponse } from "../utils/ApiResponse.js";
 
 const router = Router();
 
@@ -33,23 +32,18 @@ router.get("/google/callback", (req, res, next) => {
         secure: true,
       };
 
-      const data = {
-        _id: user._id,
-        email: user.email,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-      };
-
       return res
-        .status(200)
+        .status(301)
         .cookie("accessToken", accessToken, options)
         .cookie("refreshToken", refreshToken, options)
-        .json(new ApiResponse(200, data, "User logged In Successfully"));
+        .redirect(process.env.CORS_ORIGIN);
     } catch (error) {
-      return res.status(500).json({ message: error });
+      return res.status(500).json({ message: "testing" });
     }
   })(req, res, next);
 });
+
+router.route("/profile").get(verifyJWT, userProfile);
 
 router.route("/logout").post(verifyJWT, logoutUser);
 

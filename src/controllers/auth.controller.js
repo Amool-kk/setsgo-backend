@@ -108,23 +108,28 @@ const logoutUser = asyncHandler(async (req, res) => {
   await User.findByIdAndUpdate(
     _id,
     {
-      $set: { refreshToken: undefined },
+      $set: { refreshToken: null },
     },
     {
       new: true,
     }
   );
 
-  const options = {
-    httpOnly: true,
-    secure: true,
-  };
-
   return res
     .status(200)
-    .cookie("accessToken", options)
-    .cookie("refreshToken", options)
+    .cookie("accessToken")
+    .cookie("refreshToken")
     .json(new ApiResponse(200, {}, "User logged Out"));
 });
 
-export { registerUser, loginUser, logoutUser };
+const userProfile = asyncHandler(async (req, res) => {
+  const { _id, email, createdAt, updatedAt } = req.user;
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(200, { _id, email, createdAt, updatedAt }, "User profile")
+    );
+});
+
+export { registerUser, loginUser, logoutUser, userProfile };
