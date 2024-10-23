@@ -180,4 +180,48 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   }
 });
 
-export { registerUser, loginUser, logoutUser, userProfile, refreshAccessToken };
+const changeCurrentPassword = asyncHandler(async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+  const user = await User.findById(req.user?._id);
+
+  if (!newPassword) {
+    const temp = new ApiError(400, "Invalid password");
+    return res.status(400).json({ ...temp, message: temp.message });
+  }
+
+  if (user.googleId) {
+    user.password = newPassword;
+    await user.save({ validateBeforeSave: false });
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, {}, "Password changed successfully"));
+  }
+
+  if (!oldPassword) {
+    const temp = new ApiError(400, "Invalid password");
+    return res.status(400).json({ ...temp, message: temp.message });
+  }
+
+  const isPasswordVaild = await user.verifyPassword(oldPassword);
+
+  if (!isPasswordVaild) {
+    const temp = new ApiError(400, "Invalid password");
+    return res.status(400).json({ ...temp, message: temp.message });
+  }
+  user.password = newPassword;
+  await user.save({ validateBeforeSave: false });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Password changed successfully"));
+});
+
+export {
+  registerUser,
+  loginUser,
+  logoutUser,
+  userProfile,
+  refreshAccessToken,
+  changeCurrentPassword,
+};
