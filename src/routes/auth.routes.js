@@ -3,6 +3,7 @@ import {
   generateAccessAndRefereshToken,
   loginUser,
   logoutUser,
+  refreshAccessToken,
   registerUser,
   userProfile,
 } from "../controllers/auth.controller.js";
@@ -46,5 +47,7 @@ router.get("/google/callback", (req, res, next) => {
 router.route("/profile").get(verifyJWT, userProfile);
 
 router.route("/logout").post(verifyJWT, logoutUser);
+
+router.route("/refresh-token").post(refreshAccessToken);
 
 export default router;

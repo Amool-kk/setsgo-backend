@@ -2,6 +2,12 @@ import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { User } from "../models/user.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import jwt from "jsonwebtoken";
+
+const options = {
+  httpOnly: true,
+  secure: true,
+};
 
 export const generateAccessAndRefereshToken = async (userId) => {
   try {
@@ -83,11 +89,6 @@ const loginUser = asyncHandler(async (req, res) => {
     existedUser._id
   );
 
-  const options = {
-    httpOnly: true,
-    secure: true,
-  };
-
   const data = {
     _id: existedUser._id,
     email: existedUser.email,
@@ -132,4 +133,51 @@ const userProfile = asyncHandler(async (req, res) => {
     );
 });
 
-export { registerUser, loginUser, logoutUser, userProfile };
+const refreshAccessToken = asyncHandler(async (req, res) => {
+  const incomingRefreshToken = req.cookies?.refreshToken;
+
+  if (!incomingRefreshToken) {
+    let temp = new ApiError(401, "Unauthorized request");
+    return res.status(401).json({ ...temp, message: temp.message });
+  }
+
+  try {
+    const decodedToken = jwt.verify(
+      incomingRefreshToken,
+      process.env.REFRESH_TOKEN_SECRET
+    );
+
+    const user = await User.findById(decodedToken?._id);
+
+    if (!user) {
+      let temp = new ApiError(401, "Invalid refresh token");
+      return res.status(401).json({ ...temp, message: temp.message });
+    }
+
+    if (incomingRefreshToken !== user?.refreshToken) {
+      let temp = new ApiError(401, "Refresh token is expired or used");
+      return res.status(401).json({ ...temp, message: temp.message });
+    }
+
+    const { accessToken, refreshToken } = await generateAccessAndRefereshToken(
+      user._id
+    );
+
+    const data = {
+      _id: user?._id,
+      email: user?.email,
+      createdAt: user?.createdAt,
+      updatedAt: user?.updatedAt,
+    };
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", refreshToken, options)
+      .json(new ApiResponse(200, data, "User logged In Successfully"));
+  } catch (error) {
+    const temp = new ApiError(401, error?.message || "Invalid refresh token");
+    return res.status(401).json({ ...temp, message: temp.message });
+  }
+});
+
+export { registerUser, loginUser, logoutUser, userProfile, refreshAccessToken };
