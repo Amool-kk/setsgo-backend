@@ -25,7 +25,6 @@ const userSchema = new Schema(
       type: String,
       unique: true,
       sparse: true,
-      default: null,
     },
     refreshToken: {
       type: String,

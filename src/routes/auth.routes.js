@@ -4,6 +4,8 @@ import {
   generateAccessAndRefereshToken,
   loginUser,
   logoutUser,
+  passwordResetLink,
+  passwordReset,
   refreshAccessToken,
   registerUser,
   userProfile,
@@ -52,5 +54,9 @@ router.route("/logout").post(verifyJWT, logoutUser);
 router.route("/refresh-token").post(refreshAccessToken);
 
 router.route("/change-password").post(verifyJWT, changeCurrentPassword);
+
+router.route("/passwordReset").post(passwordResetLink);
+
+router.route("/passwordReset/:userId/:token").post(passwordReset);
 
 export default router;

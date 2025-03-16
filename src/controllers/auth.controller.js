@@ -3,6 +3,9 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { User } from "../models/user.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
+import { PasswordToken } from "../models/pass-token.model.js";
+import crypto from "crypto";
+import { sendEmail } from "../utils/sendEmail.js";
 
 const options = {
   httpOnly: true,
@@ -217,6 +220,76 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "Password changed successfully"));
 });
 
+const passwordResetLink = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    let temp = new ApiError(400, "Email is required");
+    return res.status(400).json({ ...temp, message: temp.message });
+  }
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    let temp = new ApiError(400, "User is not exists");
+    return res.status(400).json({ ...temp, message: temp.message });
+  }
+
+  let token = await PasswordToken.findOne({ userId: user._id });
+  if (!token) {
+    token = await new PasswordToken({
+      userId: user._id,
+      token: crypto.randomBytes(32).toString("hex"),
+    }).save();
+  }
+
+  const link = `${process.env.BASE_URL}/api/v1/auth/passwordReset/${user._id}/${token.token}`;
+
+  await sendEmail(user.email, "Password Reset", link);
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        {},
+        "Password reset link sent to your email account"
+      )
+    );
+});
+
+const passwordReset = asyncHandler(async (req, res) => {
+  const { password } = req.body;
+  if (!password) {
+    let temp = new ApiError(400, "Password is required");
+    return res.status(400).json({ ...temp, message: temp.message });
+  }
+
+  const { userId, token } = req.params;
+
+  const user = await User.findById(userId);
+  if (!user) {
+    let temp = new ApiError(400, "Invalid link or expired");
+    return res.status(400).json({ ...temp, message: temp.message });
+  }
+
+  const existToken = await PasswordToken.findOne({
+    userId,
+    token,
+  });
+  if (!existToken) {
+    let temp = new ApiError(400, "Invalid link or expired");
+    return res.status(400).json({ ...temp, message: temp.message });
+  }
+
+  user.password = password;
+  await user.save();
+  await existToken.deleteOne();
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Password reset Sucessfully"));
+});
+
 export {
   registerUser,
   loginUser,
@@ -224,4 +297,6 @@ export {
   userProfile,
   refreshAccessToken,
   changeCurrentPassword,
+  passwordResetLink,
+  passwordReset,
 };

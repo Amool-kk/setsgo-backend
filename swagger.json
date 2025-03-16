@@ -6,7 +6,7 @@
     "version": "1.0.0"
   },
   "host": "localhost:8000",
-  "basePath": "/",
+  "basePath": "/api/v1/healthcheck",
   "schemes": [
     "http"
   ],
@@ -106,6 +106,13 @@
     "/profile": {
       "get": {
         "description": "",
+        "parameters": [
+          {
+            "name": "cookie",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -119,6 +126,13 @@
     "/logout": {
       "post": {
         "description": "",
+        "parameters": [
+          {
+            "name": "cookie",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -147,6 +161,11 @@
         "description": "",
         "parameters": [
           {
+            "name": "cookie",
+            "in": "header",
+            "type": "string"
+          },
+          {
             "name": "body",
             "in": "body",
             "schema": {
@@ -171,6 +190,72 @@
           },
           "401": {
             "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/passwordReset": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/passwordReset/{userId}/{token}": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           }
         }
       }
