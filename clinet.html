@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat Client</title>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  </head>
+  <body>
+    <h2>Chat Client</h2>
+    <input type="text" id="messageInput" placeholder="Type a message..." />
+    <button onclick="sendMessage()">Send</button>
+    <button
+      onclick="sendPrivateMessage('a80002kk@gmail.com', 'testing privateMessage')"
+    >
+      privateMessage
+    </button>
+    <ul id="messages"></ul>
+    <button class="group">Create Group</button>
+    <div class="contacts"></div>
+
+    <script>
+      const btn = document.querySelector(".group");
+
+      const contactsDiv = document.querySelector(".contacts");
+      async function renderContacts() {
+        const res = await fetch("http://localhost:8000/api/v1/chat/contacts", {
+          method: "GET", // or 'POST', depending on your request type
+          headers: {
+            // Your other headers, if needed
+            "Content-Type": "application/json",
+          },
+          credentials: "include", // This ensures that cookies are included in the request
+        });
+        const { data } = await res.json();
+        console.log(data);
+        data.forEach((element) => {
+          contactsDiv.innerHTML += `<button class="user">${element.email}</button>`;
+        });
+      }
+      renderContacts();
+
+      // btn.addEventListener("click", () => {
+
+      // });
+    </script>
+
+    <!-- <script>
+      const token = localStorage.getItem("token");
+
+      const socket = io("http://localhost:8000", {
+        auth: { token },
+      });
+
+      // ✅ Private Message
+      function sendPrivateMessage(receiverId, message) {
+        console.log(receiverId, message);
+        socket.emit("private", { receiverId, message });
+      }
+
+      socket.on("private", ({ sender, message }) => {
+        console.log(`🔹 ${sender}: ${message}`);
+      });
+
+      // ✅ Create Group
+      function createGroup(groupName) {
+        socket.emit("createGroup", { groupName });
+      }
+
+      socket.on("groupCreated", ({ groupId, groupName }) => {
+        console.log(`✅ Group Created: ${groupName} (ID: ${groupId})`);
+      });
+
+      // ✅ Join Group
+      function joinGroup(groupId) {
+        socket.emit("joinGroup", { groupId });
+      }
+
+      socket.on("joinedGroup", ({ groupId }) => {
+        console.log(`✅ Joined Group: ${groupId}`);
+      });
+
+      // ✅ Send Group Message
+      function sendGroupMessage(groupId, message) {
+        socket.emit("groupMessage", { groupId, message });
+      }
+
+      socket.on("groupMessage", ({ sender, message }) => {
+        console.log(`📢 ${sender}: ${message}`);
+      });
+    </script> -->
+  </body>
+</html>

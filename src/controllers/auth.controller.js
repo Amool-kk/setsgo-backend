@@ -10,6 +10,7 @@ import { sendEmail } from "../utils/sendEmail.js";
 const options = {
   httpOnly: true,
   secure: true,
+  sameSite: "None",
 };
 
 export const generateAccessAndRefereshToken = async (userId) => {
@@ -249,11 +250,7 @@ const passwordResetLink = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(
-      new ApiResponse(
-        200,
-        {},
-        "Password reset link sent to your email account"
-      )
+      new ApiResponse(200, {}, "Password reset link sent to your email account")
     );
 });
 

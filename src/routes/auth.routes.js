@@ -34,6 +34,7 @@ router.get("/google/callback", (req, res, next) => {
       const options = {
         httpOnly: true,
         secure: true,
+        sameSite: "None",
       };
 
       return res
