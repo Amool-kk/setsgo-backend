@@ -26,6 +26,7 @@ import authRouter from "./routes/auth.routes.js";
 import chatRouter from "./routes/chat.routes.js";
 import messageRouter from "./routes/message.routes.js";
 import serviceRouter from "./routes/service.routes.js";
+import brandRouter from "./routes/brand.routes.js";
 
 //routes declaration
 app.use("/api/v1/healthcheck", healthcheckRouter);
@@ -33,6 +34,7 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/chat", chatRouter);
 app.use("/api/v1/message", messageRouter);
 app.use("/api/v1/service", serviceRouter);
+app.use("/api/v1/brand", brandRouter);
 
 app.get("/", (req, res) => {
   res.send(

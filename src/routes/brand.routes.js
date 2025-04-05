@@ -5,6 +5,8 @@ import {
   createBrand,
   updateBrand,
   updateBrandTeam,
+  sendTeamInvite,
+  inviteVerify,
 } from "../controllers/brand.controller.js";
 
 const router = Router();
@@ -15,6 +17,10 @@ router.route("/").post(verifyJWT, createBrand);
 
 router.route("/update").post(verifyJWT, updateBrand);
 
-router.route("/teamupdate").post(verifyJWT, updateBrandTeam);
+router.route("/verify/:token").get(inviteVerify);
+
+router.route("/teamupdate/:token").get(verifyJWT, updateBrandTeam);
+
+router.route("/teamInvite").post(verifyJWT, sendTeamInvite);
 
 export default router;

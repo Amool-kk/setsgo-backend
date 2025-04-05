@@ -17,6 +17,7 @@ const brandSchema = new Schema({
   },
   admin: {
     type: mongoose.Schema.Types.ObjectId,
+    unique: true,
     ref: "User",
   },
   team: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
