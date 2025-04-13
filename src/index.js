@@ -1,11 +1,10 @@
 import dotenv from "dotenv";
 import { app, server } from "./app.js";
 import connectDB from "./db/index.js";
-import swaggerUi from "swagger-ui-express";
-import swaggerJson from "../swagger.json" with { type: "json" };
 import { setupSocket } from "./socket.js";
+import swaggerDocs from "./utils/swagger.js";
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerJson));
+const port = process.env.PORT || 8000;
 
 dotenv.config({
   path: "./.env",
@@ -13,9 +12,10 @@ dotenv.config({
 
 connectDB()
   .then(() => {
-    server.listen(process.env.PORT || 8000, () => {
+    server.listen(port, () => {
       console.log(`Server is running at port : ${process.env.PORT}`);
     });
+    swaggerDocs(app, port);
   })
   .catch((err) => {
     console.log("Mongo db connection failed", err);

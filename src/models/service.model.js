@@ -1,5 +1,52 @@
 import mongoose, { Schema } from "mongoose";
 
+/**
+ * @openapi
+ * components:
+ *  schemas:
+ *    createServiceInput:
+ *      type: object
+ *      required:
+ *        - title
+ *        - duration
+ *        - cost
+ *      properties:
+ *        title:
+ *          type: string
+ *        icon:
+ *          type: string
+ *        description:
+ *          type: string
+ *        duration:
+ *          type: string
+ *        bufferTime:
+ *          type: string
+ *        cost:
+ *          type: string
+ *        team:
+ *          type: object
+ *        hidden:
+ *          type: string
+ *    ServiceResponse:
+ *      type: object
+ *      properties:
+ *        title:
+ *          type: string
+ *        icon:
+ *          type: string
+ *        description:
+ *          type: string
+ *        duration:
+ *          type: string
+ *        bufferTime:
+ *          type: string
+ *        cost:
+ *          type: string
+ *        team:
+ *          type: object
+ *        hidden:
+ *          type: string
+ */
 const serviceSchema = new Schema({
   title: {
     type: String,

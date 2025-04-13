@@ -1,5 +1,96 @@
 import mongoose, { Schema } from "mongoose";
 
+/**
+ * @openapi
+ * components:
+ *  schemas:
+ *    createBrand:
+ *      type: object
+ *      required:
+ *        - name
+ *        - phoneNumber
+ *        - brandURL
+ *      properties:
+ *        name:
+ *          type: string
+ *          deafult: abc
+ *        phoneNumber:
+ *          type: string
+ *          deafult: 1231231231
+ *        brandURL:
+ *          type: string
+ *          deafult: abc.setnext.app
+ *        description:
+ *          type: string
+ *          deafult: about your brand
+ *        admin:
+ *          type: string
+ *          deafult: kdfioshfiouh3hr4r89fiosndf
+ *        services:
+ *          type: object
+ *        team:
+ *          type: object
+ *        timeZone:
+ *          type: string
+ *          deafult: india
+ *        currency:
+ *          type: string
+ *          deafult: INR
+ *        logoURL:
+ *          type: string
+ *          deafult: abc.png
+ *        brandColor:
+ *          type: string
+ *          deafult: white
+ *        industry:
+ *          type: string
+ *          deafult: Auto
+ *        location:
+ *          type: object
+ *        business_hours:
+ *          type: object
+ *    CreateBrandResponse:
+ *      type: object
+ *      properties:
+ *        name:
+ *          type: string
+ *          deafult: abc
+ *        phoneNumber:
+ *          type: string
+ *          deafult: 1231231231
+ *        brandURL:
+ *          type: string
+ *          deafult: abc.setnext.app
+ *        description:
+ *          type: string
+ *          deafult: about your brand
+ *        admin:
+ *          type: string
+ *          deafult: kdfioshfiouh3hr4r89fiosndf
+ *        services:
+ *          type: object
+ *        team:
+ *          type: object
+ *        timeZone:
+ *          type: string
+ *          deafult: india
+ *        currency:
+ *          type: string
+ *          deafult: INR
+ *        logoURL:
+ *          type: string
+ *          deafult: abc.png
+ *        brandColor:
+ *          type: string
+ *          deafult: white
+ *        industry:
+ *          type: string
+ *          deafult: Auto
+ *        location:
+ *          type: object
+ *        business_hours:
+ *          type: object
+ */
 const brandSchema = new Schema({
   name: {
     type: String,

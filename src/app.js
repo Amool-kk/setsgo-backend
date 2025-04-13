@@ -29,12 +29,48 @@ import serviceRouter from "./routes/service.routes.js";
 import brandRouter from "./routes/brand.routes.js";
 
 //routes declaration
+/**
+ * @swagger
+ * tags:
+ *   name: Healthcheck
+ *   description: Healthcheck routes
+ */
 app.use("/api/v1/healthcheck", healthcheckRouter);
+/**
+ * @swagger
+ * tags:
+ *   name: Auth
+ *   description: Auth routes
+ */
 app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/chat", chatRouter);
-app.use("/api/v1/message", messageRouter);
-app.use("/api/v1/service", serviceRouter);
+/**
+ * @swagger
+ * tags:
+ *   name: Brand
+ *   description: Brand create, get and delete routes
+ */
 app.use("/api/v1/brand", brandRouter);
+/**
+ * @swagger
+ * tags:
+ *   name: Service
+ *   description: Service create, get and delete routes
+ */
+app.use("/api/v1/service", serviceRouter);
+/**
+ * @swagger
+ * tags:
+ *   name: Chat
+ *   description: Chat create, get and delete routes
+ */
+app.use("/api/v1/chat", chatRouter);
+/**
+ * @swagger
+ * tags:
+ *   name: Message
+ *   description: Message sent routes and get all 
+ */
+app.use("/api/v1/message", messageRouter);
 
 app.get("/", (req, res) => {
   res.send(

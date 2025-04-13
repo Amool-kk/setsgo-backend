@@ -2,6 +2,44 @@ import mongoose, { Schema } from "mongoose";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
+/**
+ * @openapi
+ * components:
+ *  schemas:
+ *    createUserInput:
+ *      type: object
+ *      required:
+ *        - email
+ *        - password
+ *      properties:
+ *        email:
+ *          type: string
+ *          deafult: abc@example.com
+ *        password:
+ *          type: string
+ *          deafult: example@1234
+ *    CreateUserResponse:
+ *      type: object
+ *      properties:
+ *        statusCode:
+ *          type: string
+ *        message:
+ *          type: string
+ *        success:
+ *          type: string
+ *        data:
+ *          type: object
+ *          properties:
+ *            email:
+ *              type: string
+ *            _id:
+ *              type: string
+ *            createdAt:
+ *              type: string
+ *            updatedAt:
+ *              type: string
+ */
+
 const userSchema = new Schema(
   {
     name: {

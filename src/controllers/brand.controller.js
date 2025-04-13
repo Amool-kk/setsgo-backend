@@ -13,7 +13,7 @@ const getBrand = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, brand, "Ok"));
   } catch (error) {
     let temp = new ApiError(400);
-    return res.status(500).json(temp);
+    return res.status(400).json(temp);
   }
 });
 
@@ -107,7 +107,7 @@ const updateBrand = asyncHandler(async (req, res) => {
     const updatedBrand = await existBrand.save();
     res
       .status(200)
-      .json(new ApiResponse(200, updateBrand, "Brand updated successfully"));
+      .json(new ApiResponse(200, updatedBrand, "Brand updated successfully"));
   } catch (error) {
     let temp = new ApiError(400);
     return res.status(500).json({ ...temp, message: error.message });
