@@ -8,9 +8,16 @@ import "./utils/google.strategies.js";
 const app = express();
 const server = http.createServer(app);
 
+const allowed = [process.env.CORS_ORIGIN, process.env.CORS_ORIGIN_2];
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN,
+    origin: function (origin, callback) {
+      if (!origin || allowed.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
@@ -68,7 +75,7 @@ app.use("/api/v1/chat", chatRouter);
  * @swagger
  * tags:
  *   name: Message
- *   description: Message sent routes and get all 
+ *   description: Message sent routes and get all
  */
 app.use("/api/v1/message", messageRouter);
 

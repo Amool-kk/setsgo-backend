@@ -1,13 +1,20 @@
+# Use official Node.js 18 image
 FROM node:18
 
-WORKDIR /usr/src/app
+# Set the working directory in the container
+WORKDIR /
 
+# Copy package.json and package-lock.json (if available)
 COPY package*.json ./
 
-RUN npm install --production
+# Install dependencies — use full install if it's not production-only
+RUN npm install
 
+# Copy the rest of your application code
 COPY . .
 
+# Expose port your app runs on
 EXPOSE 8000
 
-CMD ["npm", "start"]
+# Define default command to run your app
+CMD ["node", "src/index.js"]
